@@ -9,9 +9,15 @@ const left = 37;
 const up = 38;
 const right = 39;
 const down = 40;
+
+let eatSound = new Audio('eat.mp3');
+let loseSound = new Audio("lose.wav");
+let startSound = new Audio("start.mp3");
+
 let mark = 0;
+let bestMark = 0;
 let score = document.getElementById("score");
-score.innerHTML = mark;
+score.innerHTML = "score: " + mark + " best mark: "+ bestMark;
 ctx.fillStyle = backgroundColor;
 ctx.fillRect(0, 0, gameSize, gameSize)
 
@@ -56,13 +62,13 @@ class Snake {
         if (this.body[0].x < 0) {
             this.body[0].x = gameSize-unit;
         }
-        if (this.body[0].x > gameSize) {
+        if (this.body[0].x > gameSize-unit) {
             this.body[0].x = 0 ;
         }
         if (this.body[0].y < 0) {
             this.body[0].y = gameSize-unit;
         }
-        if (this.body[0].y > gameSize) {
+        if (this.body[0].y > gameSize-unit) {
             this.body[0].y = 0 ;
         }
     }
@@ -178,6 +184,7 @@ let food = new Food();
 food.spawn();
 
 function play() {
+    startSound.play();
     function myStopFunction() {
         clearInterval(myLoop);
     }
@@ -189,17 +196,23 @@ function play() {
             food.spawn()
             mark++;
             let score = document.getElementById("score");
-            score.innerHTML = mark;
+            score.innerHTML = "score: " + mark + " best mark: "+ bestMark;
+            eatSound.play();
         };
         if (player.checkEnd()) {
+            if (score >= bestMark) {
+                bestMark=score;
+                score.innerHTML = "score: " + mark + bestMark;
+            };
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, gameSize, gameSize);
             ctx.fillStyle = "white";
             ctx.font = "30px Arial";
             ctx.fillText("GAME OVER", 100, 100);
+            loseSound.play();
             myStopFunction();
         }
-    }, 100); 
+    }, 125); 
 }
 
 
