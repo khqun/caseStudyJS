@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .rule {
+            width: 100%;
+            background-color: #8C54A4;
+            height: auto;
+            margin-left: 5px;
+            padding: 30px;
+        }
+
+        .playButton {
+            font-size: 35px;
+            font-style: italic;
+            background-color: #cbb1d7;
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        style="border:1px solid green; background-color: #d0acf9;padding: 10px;width:50%;margin-left: 30%;margin-top: 5%;display: flex;z-index: 1;">
+        <canvas id="myCanvas">
+        </canvas>
+        <div class="rule">
+            <p>Luật chơi:</p>
+            <button class="playButton" onclick="play()">PLAY</button>
+            <p id="score"></p>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="game.js"></script>
