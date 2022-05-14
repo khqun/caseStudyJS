@@ -9,15 +9,21 @@ const left = 37;
 const up = 38;
 const right = 39;
 const down = 40;
+let difficult = 100;
+const button = document.getElementById('playButton');
 
-let eatSound = new Audio('eat.mp3');
-let loseSound = new Audio("lose.wav");
-let startSound = new Audio("start.mp3");
+// Âm thanh
+let eatSound = new Audio('../SoundEffects/eat.wav');
+let loseSound = new Audio("../SoundEffects/lose.wav");
+let startSound = new Audio("../SoundEffects/start.mp3");
+let winSound = new Audio("../SoundEffects/win.wav");
+let foodSound = new Audio("../SoundEffects/spawn.wav");
 
+// điểm số
 let mark = 0;
 let bestMark = 0;
 let score = document.getElementById("score");
-score.innerHTML = "score: " + mark + " best mark: "+ bestMark;
+score.innerHTML = "Score: " + mark + " Best score: "+ bestMark;
 ctx.fillStyle = backgroundColor;
 ctx.fillRect(0, 0, gameSize, gameSize)
 
@@ -31,6 +37,7 @@ class vectorCoordinate {
 
 let currentDirection = new vectorCoordinate(-1, 0);
 
+// con rắn
 class Snake {
     constructor() {
         this.body = [
@@ -110,35 +117,16 @@ class Snake {
             return true
         }
     }
+    toDefault(){
+        console.log(this.body.length > 3);
+        while (this.body.length > 3) {
+            this.body.pop();
+        }
+    }
+    checkWin(){
+        return this.body.length == gameSize*2;
+    }
 }
-
-
-class Food {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    draw() {
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.x, this.y, unit, unit);
-    }
-    clear() {
-        ctx.fillStyle = "black";
-        ctx.clearRect(this.x, this.y, unit, unit);
-    }
-    getRandomNumber() {
-        let randomNumber = Math.floor(Math.random() * gameSize);
-        randomNumber -= randomNumber % unit;
-        return randomNumber;
-    }
-    spawn() {
-        this.x = this.getRandomNumber();
-        this.y = this.getRandomNumber();
-        this.draw();
-    }
-
-}
-
 // di chuyển rắn
 document.onkeydown = function (button) {
     switch (button.keyCode) {
@@ -175,6 +163,32 @@ document.onkeydown = function (button) {
     }
 }
 
+// thức ăn
+class Food {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    draw() {
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x, this.y, unit, unit);
+    }
+    clear() {
+        ctx.fillStyle = "black";
+        ctx.clearRect(this.x, this.y, unit, unit);
+    }
+    getRandomNumber() {
+        let randomNumber = Math.floor(Math.random() * gameSize);
+        randomNumber -= randomNumber % unit;
+        return randomNumber;
+    }
+    spawn() {
+        this.x = this.getRandomNumber();
+        this.y = this.getRandomNumber();
+        this.draw();
+    }
+
+}
 
 
 
@@ -188,32 +202,56 @@ function play() {
     function myStopFunction() {
         clearInterval(myLoop);
     }
+    button.setAttribute('disabled', '');
     var myLoop = setInterval(function () {
         console.log();
         player.move();
         if (player.checkEat(food)) {
             player.grow();
-            food.spawn()
+            food.spawn();
+            foodSound.play();
             mark++;
             let score = document.getElementById("score");
-            score.innerHTML = "score: " + mark + " best mark: "+ bestMark;
+            score.innerHTML = "Score: " + mark + " Best score: "+ bestMark;
             eatSound.play();
-        };
-        if (player.checkEnd()) {
-            if (score >= bestMark) {
-                bestMark=score;
-                score.innerHTML = "score: " + mark + bestMark;
-            };
+        }
+        if (player.checkWin()) {
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, gameSize, gameSize);
             ctx.fillStyle = "white";
             ctx.font = "30px Arial";
-            ctx.fillText("GAME OVER", 100, 100);
+            ctx.fillText("YOU WIN", 120, 100);
+            winSound.play();
+            myStopFunction();
+        }
+        if (player.checkEnd()) {
+            if (mark >= bestMark) {
+                bestMark = mark;
+                score.innerHTML = "Score: " + mark + " Best score: " + bestMark;
+            } 
+            console.log(bestMark);
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, gameSize, gameSize);
+            ctx.fillStyle = "white";
+            ctx.font = "30px Arial";
+            ctx.fillText("GAME OVER", 120, 100);
             loseSound.play();
             myStopFunction();
         }
-    }, 125); 
+    }, difficult); 
 }
+function reset() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, gameSize, gameSize);
+    player.toDefault();
+    player.draw();
+    food.spawn();
+    mark = 0;
+    score.innerHTML = "Score: " + mark + " Best score: " + bestMark;
+    play();
+}
+
+
 
 
 

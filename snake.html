@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .rule {
+            width: 100%;
+            background-color: #8C54A4;
+            height: auto;
+            margin-left: 5px;
+            padding: 30px;
+        }
+
+
+        #playButton {
+            font-size: 35px;
+            background-color: #cbb1d7;
+        }
+        #resetButton{
+            font-size: 35px;
+            background-color: rgb(252, 169, 255);
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div
+        style="border:1px solid green; background-color: #d0acf9;padding: 10px;width:50%;margin-left: 30%;margin-top: 5%;display: flex;z-index: 1;">
+        <canvas id="myCanvas">
+        </canvas>
+        <div class="rule">
+            <p style="font-size:20px;">  <span style="font-size: 35px !important;">Luật chơi:</span>    <br>
+                -Người chơi sẽ điểu khiển chú rắn để ăn những quả táo xuất hiện trên khung hình. <br>
+                -Mỗi lần ăn được 1 quả thì điểm số sẽ tăng lên 1. <br>
+                -Để di chuyển chú rắn, người chơi hãy sử dụng các phím mũi tên. <br>
+                -Chú rắn sẽ chết nếu đầu của nó va vào thân mình. <br>
+                -Người chơi sẽ thắng khi độ dài của con của rắn đầy ắp màn hình game.
+
+            </p>
+            <button id="playButton" onclick="play()">PLAY</button>
+            <button id="resetButton" onclick="reset()">RESET</button>
+            <p id="score" style="font-size: 30px;"></p>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="game.js"></script>
+<script src="snake.js"></script>
+<script src="food.js"></script>
